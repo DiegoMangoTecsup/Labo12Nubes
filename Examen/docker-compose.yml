@@ -1,0 +1,24 @@
+version: '3'
+services:
+  web:
+    build:
+      context: ./www  
+    ports:
+      - "8080:80" 
+    volumes:
+      - ./www:/var/www/html  # Monta el código fuente en el contenedor
+    depends_on:
+      - api 
+  api:
+    build:
+      context: ./api  # Ruta al contexto de construcción
+    ports:
+      - "5000:5000"  # Puerto en el host: Puerto en el contenedor
+    volumes:
+      - ./api:/app  # Monta el código fuente en el contenedor
+    depends_on:
+      - redis  # Asegura que el servicio de Redis esté disponible antes de iniciar la API
+  redis:
+    image: "redis:alpine"  # Utiliza la imagen oficial de Redis
+    ports:
+      - "6379:6379"  # Puerto en el host: Puerto en el contenedor
